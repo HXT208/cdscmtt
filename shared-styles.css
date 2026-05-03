@@ -1,0 +1,64 @@
+/* =============================================
+   SHARED STYLES - HHT K14
+   Dùng chung cho: index.html, tailieu.html, timcuahang.html
+   ============================================= */
+
+/* --- Base --- */
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 768px) {
+    body { padding-bottom: 0; }
+}
+
+/* --- Custom Scrollbar --- */
+.custom-scrollbar::-webkit-scrollbar       { width: 5px; height: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* --- Category Button (tailieu.html) ---
+   Dùng data-active="true/false" thay vì gán className dài trong JS
+   ----------------------------------------------------------------- */
+.cat-btn {
+    transition: color 0.15s, background-color 0.15s, border-color 0.15s;
+}
+.cat-btn[data-active="false"] {
+    background-color: #ffffff;
+    color: #475569;
+    border-color: #e2e8f0;
+}
+.cat-btn[data-active="false"]:hover {
+    background-color: #f8fafc;
+}
+.cat-btn[data-active="false"] span {
+    background-color: #f1f5f9;
+    color: #64748b;
+    box-shadow: none;
+}
+.cat-btn[data-active="true"] {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border-color: #fee2e2;
+}
+.cat-btn[data-active="true"] span {
+    background-color: #ffffff;
+    color: #ef4444;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+/* --- Bottom nav safe area (index.html) --- */
+#bottom-nav {
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* --- Back to top button (index.html) --- */
+#btn-back-to-top {
+    bottom: 90px;
+    right: 16px;
+}

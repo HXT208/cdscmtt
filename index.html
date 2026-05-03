@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CÔNG CỤ CHẨN ĐOÁN SỰ CỐ MÁY TÍNH</title>
+    
+        <!-- Preconnect: giảm thời gian DNS/TLS cho các CDN -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <link rel="icon" type="image/png" href="hinh-anh/logo-hht.png">
+
+    <meta property="og:title" content="CÔNG CỤ CHẨN ĐOÁN SỰ CỐ MÁY TÍNH - K14">
+    <meta property="og:description" content="Hỗ trợ mọi người tra cứu nhanh và hướng dẫn khắc phục các lỗi phần cứng PC.">
+    <meta property="og:image" content="https://cdscmt.id.vn/hinh-anh/logo-hht.png">
+    
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="tailwind.min.css">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { max-width: 100vw; overflow-x: hidden; font-family: 'Inter', sans-serif; background-color: #f0f2f5; padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)); } 
+        @media (min-width: 768px) { body { padding-bottom: 0; } }
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+        
+        .resistor-band { width: 22px; height: 75px; display: inline-block; border: 1px solid rgba(0,0,0,0.6); margin: 0 10px; border-radius: 2px; }
+        .resistor-body { background-color: #e3c498; padding: 15px 30px; border-radius: 16px; display: inline-flex; align-items: center; border: 2px solid #a37c4d; box-shadow: inset 0 2px 8px rgba(0,0,0,0.15); min-width: 220px; justify-content: center; }
+        
+        .marquee-container { display: flex; overflow: hidden; white-space: nowrap; width: 100%; align-items: center; }
+        .marquee-text { animation: scrollText 12s linear infinite; }
+        @keyframes scrollText { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
+        @media (min-width: 768px) { .marquee-container { white-space: normal; display: block; overflow: visible; } .marquee-text { animation: none; transform: none; } }
+        
+        .tooltip:before { text-align: left !important; font-size: 12px !important; line-height: 1.5 !important; padding: 10px 14px !important; font-weight: 500 !important; white-space: normal !important; max-width: 250px !important; border-radius: 8px !important; }
+        
+        .timeline-item { position: relative; padding-left: 35px; }
+        .timeline-icon { position: absolute; left: 0; top: 2px; width: 24px; height: 24px; background: white; border: 2px solid #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; color: #ef4444; }
+        .timeline-item:not(:last-child)::after { content: ''; position: absolute; left: 11px; top: 26px; height: 100%; width: 2px; background-color: #e2e8f0; z-index: 0; }
+    </style>
+    <link rel="stylesheet" href="shared-styles.css">
+</head>
+<body class="flex flex-col min-h-screen text-slate-800 w-full">
+
+    <div id="loading-screen" class="fixed inset-0 bg-slate-50 z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
+        <img src="hinh-anh/logo-hht.png" class="h-16 md:h-20 mb-8 animate-pulse" alt="Logo HHT" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
+        <svg class="animate-spin h-10 w-10 text-red-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        <h2 class="text-slate-600 font-bold text-sm uppercase tracking-widest">Đang tải dữ liệu...</h2>
+    </div>
+
+    <header class="bg-white shadow-sm border-b-[3px] border-red-600 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-2.5 flex justify-between items-center relative">
+            <img src="hinh-anh/logo-hht.png" alt="Logo" class="h-9 md:h-11 object-contain cursor-pointer relative z-10" onclick="window.location.href='index.html'" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
+            <div class="flex absolute inset-0 items-center justify-center pointer-events-none">
+                <h1 class="text-[14px] md:text-xl font-extrabold text-red-700 tracking-tight uppercase mt-1">CHẨN ĐOÁN SỰ CỐ MÁY TÍNH</h1>
+            </div>
+            <button class="btn btn-sm btn-outline btn-error font-bold relative z-10" onclick="modal_info.showModal()">THÔNG TIN</button>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-6 md:py-8 max-w-5xl">
+        <div class="sticky top-[60px] md:top-0 z-40 bg-[#f0f2f5]/90 backdrop-blur-md py-2 md:relative md:bg-transparent md:backdrop-blur-none w-full">
+            <div class="bg-white p-4 md:p-6 rounded-xl shadow-md border border-slate-200">
+                <p class="text-xs font-bold text-slate-400 uppercase mb-2">Tra cứu nhanh triệu chứng:</p>
+                <div class="relative">
+                    <input type="text" id="searchInput" class="w-full pl-10 pr-4 py-3 md:py-3.5 rounded-lg border-2 border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 font-medium text-sm md:text-base outline-none focus:outline-none focus:border-red-500 focus:ring-0 focus:bg-white transition-all shadow-inner" placeholder="VD: máy không lên màn hình, sọc màn hình...">
+                    <svg class="w-5 h-5 absolute left-3 top-3.5 md:top-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                
+                <div class="hidden md:grid grid-cols-4 gap-4 mt-5">
+                    <button onclick="modal_giaitri.showModal(); generateResistor();" class="btn btn-sm h-10 btn-ghost border-slate-200 bg-white hover:bg-red-50 text-red-600">MỤC GIẢI TRÍ</button>
+                    <a href="thu-vien-tai-lieu.html" class="btn btn-sm h-10 btn-ghost border-slate-200 bg-white hover:bg-red-50 text-red-600">MỤC TÀI LIỆU</a>
+                    <a href="tim-cua-hang.html" class="btn btn-sm h-10 btn-ghost border-slate-200 bg-white hover:bg-red-50 text-red-600">TÌM CỬA HÀNG</a>
+                    <button onclick="modal_update.showModal()" class="btn btn-sm h-10 btn-ghost border-slate-200 bg-white text-slate-400">⏳ CHỜ UPDATE</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-amber-50 border-l-4 border-amber-500 rounded-lg p-3 mt-5 mb-6 flex items-center gap-3 overflow-hidden shadow-sm">
+            <svg class="h-5 w-5 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+            <div class="marquee-container flex-grow">
+                <p class="marquee-text text-[13px] text-slate-700"><strong>LƯU Ý:</strong> Thông tin chỉ mang tính tham khảo, việc tự ý can thiệp vào phần cứng có thể gây hư hỏng nặng hơn hoặc mất bảo hành.</p>
+            </div>
+        </div>
+
+        <section id="resultContainer" class="w-full space-y-4 relative z-0"></section>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[100] flex justify-around items-center md:hidden shadow-[0_-4px_10px_rgba(0,0,0,0.05)]" id="bottom-nav">
+        <button onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-full h-full text-red-600 gap-1.5 pt-1">
+            <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+            <span class="text-[11px] font-bold">Trang chủ</span>
+        </button>
+        <button onclick="window.location.href='thu-vien-tai-lieu.html'" class="flex flex-col items-center justify-center w-full h-full text-slate-400 hover:text-red-600 transition-colors gap-1.5 pt-1">
+            <svg class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+            <span class="text-[11px] font-bold">Tài liệu</span>
+        </button>
+        <button onclick="window.location.href='tim-cua-hang.html'" class="flex flex-col items-center justify-center w-full h-full text-slate-400 hover:text-red-600 transition-colors gap-1.5 pt-1">
+            <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span class="text-[11px] font-bold">Cửa hàng</span>
+        </button>
+    </nav>
+
+    <dialog id="modal_info" class="modal">
+        <div class="modal-box bg-white p-6 max-w-sm rounded-2xl shadow-2xl border-t-4 border-red-600 relative">
+            <h3 class="font-extrabold text-lg text-red-700 uppercase tracking-wider mb-4 text-center border-b border-slate-100 pb-3">THÔNG TIN CHI TIẾT</h3>
+            <div class="space-y-4 text-slate-700 text-sm">
+                <div><strong class="text-slate-900 mb-1">Tên đề tài:</strong> <span>Xây dựng công cụ tra cứu và chẩn đoán sự cố máy tính.</span></div>
+                <div><strong class="text-slate-900 block mb-1">Nhóm sinh viên thực hiện:</strong><ul class="pl-1 space-y-1 text-slate-600"><li>- Nguyễn Thanh Hiếu</li><li>- Nguyễn Công Huy</li><li>- Đỗ Lê Hoàng</li></ul></div>
+                <div><strong class="text-slate-900 block mb-1">Giáo viên hướng dẫn:</strong><ul class="pl-1 space-y-1 text-slate-600"><li>- Nguyễn Xuân Mạnh</li><li>- Đinh Ngọc Hải</li><li>- Nguyễn Thị Nhung</li></ul></div>
+            </div>
+            <div class="modal-action mt-6 pt-3 border-t border-slate-100 flex justify-end">
+                <form method="dialog"><button class="btn btn-sm btn-error text-white font-bold px-6 rounded-lg">ĐÓNG</button></form>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop bg-slate-900/60"><button>close</button></form>
+    </dialog>
+
+    <dialog id="modal_giaitri" class="modal">
+        <div class="modal-box bg-white p-0 rounded-2xl border-t-4 border-red-600 shadow-2xl max-w-[360px] w-11/12 overflow-hidden">
+            <div class="bg-slate-50 px-5 py-4 border-b border-slate-200 flex justify-between items-center">
+                <h3 class="font-extrabold text-base text-red-700 uppercase tracking-wider">Đọc giá trị điện trở</h3>
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:bg-slate-200">✕</button>
+                </form>
+            </div>
+            <div class="p-6 flex flex-col items-center justify-center">
+                <p class="text-slate-500 mb-6 text-center text-sm">Nhập giá trị điện trở theo các vạch màu.</p>
+                <div class="resistor-body my-2">
+                    <div id="band1" class="resistor-band bg-red-500"></div>
+                    <div id="band2" class="resistor-band bg-black"></div>
+                    <div id="band3" class="resistor-band bg-orange-500"></div>
+                    <div class="resistor-band bg-yellow-600 ml-5"></div> 
+                </div>
+                <div class="relative w-full mt-7 px-2">
+                    <input type="number" id="quizAnswer" placeholder="Nhập số..." class="w-full pl-6 pr-12 py-3 border-2 border-slate-200 rounded-xl focus:border-red-500 outline-none text-center font-bold text-xl transition-colors shadow-inner" />
+                    <span class="absolute right-7 top-1/2 -translate-y-1/2 font-extrabold text-slate-400 text-lg">Ω</span>
+                </div>
+                <p id="quizFeedback" class="mt-4 min-h-[1.5rem] font-bold text-[15px] text-center transition-all"></p>
+                <div class="mt-4 flex gap-3 w-full px-2">
+                    <button onclick="checkQuiz()" class="flex-1 btn btn-error text-white font-bold">Kiểm tra</button>
+                    <button onclick="generateResistor()" class="flex-1 btn btn-outline btn-error font-bold">Đổi màu</button>
+                </div>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop bg-slate-900/60"><button>close</button></form>
+    </dialog>
+
+    <dialog id="modal_update" class="modal">
+        <div class="modal-box bg-white rounded-xl border-t-4 border-slate-400 shadow-2xl text-center py-8 max-w-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-slate-300 mb-3 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <h3 class="font-bold text-xl text-slate-700 mb-1 uppercase">Đang phát triển</h3>
+            <p class="text-slate-500 text-sm">Vui lòng thử lại sau!</p>
+            <div class="modal-action mt-6 justify-center">
+                <form method="dialog"><button class="btn btn-sm btn-neutral px-8">ĐÓNG</button></form>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop bg-slate-900/40"><button>close</button></form>
+    </dialog>
+
+    <button id="btn-back-to-top" class="fixed bg-red-600 text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all z-[90]" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 15l7-7 7 7"></path></svg>
+    </button>
+
+    <script src="loi-may-tinh.js" defer></script>
+    <script src="minigame-doc-dien-tro.js" defer></script> 
+    <script src="search.js" defer></script>
+    <script src="autocomplete.js" defer></script>
+    
+    <script>
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loading-screen');
+            if(loader) { setTimeout(() => { loader.style.opacity = '0'; setTimeout(() => { loader.style.display = 'none'; }, 500); }, 400); }
+        });
+        setTimeout(() => { const loaderFallback = document.getElementById('loading-screen'); if(loaderFallback) loaderFallback.style.display = 'none'; }, 4000); 
+
+        window.addEventListener('scroll', function() {
+            const btnTop = document.getElementById('btn-back-to-top');
+            if(btnTop) {
+                if (window.scrollY > 300) { btnTop.classList.remove('opacity-0', 'invisible'); btnTop.classList.add('opacity-100', 'visible'); } 
+                else { btnTop.classList.remove('opacity-100', 'visible'); btnTop.classList.add('opacity-0', 'invisible'); }
+            }
+        });
+    </script>
+</body>
+</html>

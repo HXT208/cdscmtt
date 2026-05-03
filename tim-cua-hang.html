@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cửa Hàng Uy Tín - HHT K14</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="tailwind.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared-styles.css">
+</head>
+<body class="flex flex-col min-h-screen text-slate-800 overflow-x-hidden w-full">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-lg md:text-xl font-extrabold text-red-700 tracking-tight uppercase">CỬA HÀNG SỬA CHỮA</h1>
+            <button onclick="window.location.href='index.html'"
+                class="hidden md:flex text-sm font-bold text-slate-500 hover:text-red-600 items-center gap-1 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                QUAY LẠI
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-6 md:py-8">
+        <div class="w-full max-w-6xl mx-auto flex flex-col md:flex-row bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+
+            <!-- Bản đồ -->
+            <div class="w-full md:w-3/5 h-[35vh] min-h-[280px] md:h-[650px] bg-slate-200 relative order-1 md:order-2 border-b md:border-b-0 md:border-l border-slate-200">
+                <div id="mapPlaceholder" class="absolute inset-0 hidden flex-col items-center justify-center bg-slate-100 z-20">
+                    <svg class="w-10 h-10 mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <p class="font-semibold text-slate-500 text-sm">Chưa có bản đồ cho cơ sở này</p>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm z-0">Đang tải bản đồ...</div>
+                <iframe id="mapFrame" src="" class="w-full h-full border-none relative z-10" allowfullscreen loading="lazy"></iframe>
+            </div>
+
+            <!-- Danh sách cửa hàng -->
+            <div class="w-full md:w-2/5 flex flex-col order-2 md:order-1 md:h-[650px] bg-slate-50 md:bg-white">
+                <div class="p-5 border-b border-slate-200 bg-white shrink-0 shadow-sm">
+                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wide flex items-center gap-2">
+                        <svg class="w-5 h-5 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Danh sách cửa hàng sửa chữa
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1.5 ml-7">Chọn cơ sở để xem trên bản đồ.</p>
+                </div>
+                <div id="storeList" class="flex-grow p-4 space-y-4 md:overflow-y-auto custom-scrollbar pb-10"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="btm-nav md:hidden bg-white border-t border-slate-200 z-50">
+        <button onclick="window.location.href='index.html'" class="text-slate-500 hover:text-red-600">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span class="btm-nav-label text-[10px] font-bold">Trang chủ</span>
+        </button>
+        <button onclick="window.location.href='thu-vien-tai-lieu.html'" class="text-slate-500 hover:text-red-600">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            <span class="btm-nav-label text-[10px] font-bold">Tài liệu</span>
+        </button>
+        <button class="active text-red-600">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span class="btm-nav-label text-[10px] font-bold">Cửa hàng</span>
+        </button>
+    </div>
+
+    <script>
+        // =============================================
+        // DATA - Thêm cửa hàng mới vào đây
+        // =============================================
+        const stores = [
+            {
+                id: 1,
+                name: "Laptop Xuân Mạnh",
+                branches: [
+                    { name: "Cơ sở chính", address: "311 Đường Cổ Nhuế, Bắc Từ Liêm, Hà Nội", map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4469.766625366276!2d105.77677917597131!3d21.06508578059337!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3134559897e7bf9b%3A0x6d641a0b8341b16d!2zVHJ1bmcgdMOibSBz4butYSBjaOG7r2UQBNOrnQlzo3ftqm0Jj5Sf9zEHlPApapd-rWsAHREzkweiTw!5e1!3m2!1svi!2s!4v1776002583121!5m2!1svi!2s" },
+                ]
+            },
+            {
+                id: 2,
+                name: "Trường Cao Đẳng Công Nghệ Cao Hà Nội",
+                branches: [
+                    { name: "Cơ sở 1", address: "Phường Tây Mỗ, Nam Từ Liêm, Hà Nội",             map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4471.095044325795!2d105.74757277597028!3d21.020831180626462!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3134549c574476c3%3A0xd3c6af79105ea6da!2zVHLGsOG7nW5nIENhbyDEkeG6s25nIEPDtG5nIG5naOG7hyBDYW8gSMOgIE7hu5lp!5e1!3m2!1svi!2s!4v1776002635471!5m2!1svi!2s" },
+                    { name: "Cơ sở 2", address: "268 Vũ Hữu, Phường Thanh Xuân, TP. Hà Nội",      map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9766.534077724677!2d105.79328161498198!3d20.993081412122866!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135acb9825489f3%3A0x7498ac1d911562bb!2zVHLGsOG7nW5nIENhbyDEkeG6s25nIEPDtG5nIG5naOG7hyBjYW8gSMOgIE7hu5lpIChDxqEgc-G7nyAyIFbFqSBI4buvdSk!5e1!3m2!1svi!2s!4v1776002732940!5m2!1svi!2s" },
+                    { name: "Cơ sở 3", address: "181 Đình Thôn, Phường Từ Liêm, TP. Hà Nội",      map: "" },
+                ]
+            },
+        ];
+
+        // =============================================
+        // STATE
+        // =============================================
+        let selectedStoreId    = stores[0].id;
+        let selectedBranchIdx  = 0;
+
+        // =============================================
+        // CORE — một hàm duy nhất xử lý mọi thay đổi
+        // =============================================
+        function applySelection() {
+            updateMap();
+            renderList();
+            if (window.innerWidth < 768) window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function selectStore(id) {
+            selectedStoreId   = id;
+            selectedBranchIdx = 0;
+            applySelection();
+        }
+
+        function selectBranch(e, storeId, branchIdx) {
+            e.stopPropagation();
+            selectedStoreId   = storeId;
+            selectedBranchIdx = branchIdx;
+            applySelection();
+        }
+
+        // =============================================
+        // UPDATE MAP
+        // =============================================
+        function updateMap() {
+            const store     = stores.find(s => s.id === selectedStoreId);
+            const frame     = document.getElementById('mapFrame');
+            const placeholder = document.getElementById('mapPlaceholder');
+            if (!store) return;
+
+            const mapUrl = store.branches[selectedBranchIdx]?.map || '';
+            if (mapUrl) {
+                frame.src = mapUrl;
+                frame.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                placeholder.classList.remove('flex');
+            } else {
+                frame.src = '';
+                frame.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                placeholder.classList.add('flex');
+            }
+        }
+
+        // =============================================
+        // RENDER LIST
+        // =============================================
+        function renderList() {
+            document.getElementById('storeList').innerHTML = stores.map(store => {
+                const isActive = store.id === selectedStoreId;
+
+                const branchesHtml = isActive
+                    ? `<div class="mt-3 space-y-2.5">
+                        ${store.branches.map((branch, idx) => {
+                            const isBranchActive = idx === selectedBranchIdx;
+                            return `
+                                <div onclick="selectBranch(event, ${store.id}, ${idx})"
+                                    class="p-3 rounded-lg border cursor-pointer transition-all
+                                           ${isBranchActive ? 'bg-red-50 border-red-200 shadow-inner' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+                                    <p class="text-xs font-extrabold ${isBranchActive ? 'text-red-600' : 'text-slate-600'}">${branch.name}</p>
+                                    <p class="text-[13px] text-slate-500 mt-1 leading-relaxed">${branch.address}</p>
+                                    ${!branch.map ? '<span class="text-[10px] text-amber-500 font-bold mt-1 block">⚠ Chưa có bản đồ</span>' : ''}
+                                </div>`;
+                        }).join('')}
+                       </div>`
+                    : `<p class="text-[13px] text-slate-500 mt-1.5 truncate">${store.branches[0].address}</p>
+                       ${store.branches.length > 1 ? `<p class="text-[10px] font-bold text-red-500 mt-2 bg-red-50 inline-block px-2.5 py-1 rounded-md">+${store.branches.length - 1} cơ sở khác</p>` : ''}`;
+
+                return `
+                    <div onclick="${!isActive ? `selectStore(${store.id})` : ''}"
+                        class="p-4 rounded-xl border-2 transition-all bg-white
+                               ${isActive ? 'border-red-500 shadow-md cursor-default' : 'border-slate-200 hover:border-slate-300 shadow-sm cursor-pointer'}">
+                        <h3 class="font-bold text-[15px] ${isActive ? 'text-red-700' : 'text-slate-800'}">${store.name}</h3>
+                        ${branchesHtml}
+                    </div>`;
+            }).join('');
+        }
+
+        // =============================================
+        // INIT
+        // =============================================
+        applySelection();
+    </script>
+</body>
+</html>
